@@ -1,0 +1,23 @@
+# Maven
+/target/
+
+# IDE
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+.vscode/
+
+# Secrets / local environment
+.env
+.env.*
+!.env.example
+*.jks
+*.p12
+*.pfx
+
+# OS / logs
+.DS_Store
+Thumbs.db
+*.log

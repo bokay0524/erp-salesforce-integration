@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dev.portfolio.integration.repository.ErpMapper">
+
+    <select id="selectCustomer" resultType="dev.portfolio.integration.model.CustomerRecord">
+        SELECT customer_code, customer_name, business_no, email, phone, updated_at
+        FROM erp_customer WHERE customer_code = #{customerCode}
+    </select>
+
+    <select id="selectAllProducts" resultType="dev.portfolio.integration.model.ProductRecord">
+        SELECT product_code, product_name, category, unit_price, active, updated_at
+        FROM erp_product ORDER BY product_code
+    </select>
+
+    <select id="selectOrder" resultType="dev.portfolio.integration.model.OrderRecord">
+        SELECT order_no, quote_no, customer_code, order_date, status, total_amount
+        FROM erp_sales_order WHERE order_no = #{orderNo}
+    </select>
+
+    <select id="selectOrderItems" resultType="dev.portfolio.integration.model.OrderItemRecord">
+        SELECT order_no, line_no, product_code, quantity, unit_price
+        FROM erp_sales_order_item WHERE order_no = #{orderNo} ORDER BY line_no
+    </select>
+
+    <select id="selectDelivery" resultType="dev.portfolio.integration.model.DeliveryRecord">
+        SELECT delivery_no, order_no, shipped_at, carrier, tracking_no, status
+        FROM erp_delivery WHERE delivery_no = #{deliveryNo}
+    </select>
+
+    <update id="mergeQuote">
+        MERGE INTO erp_quote (quote_no, customer_code, quote_date, status)
+        KEY(quote_no)
+        VALUES (#{quote.quoteNo}, #{quote.customerCode}, #{quote.quoteDate}, #{quote.status})
+    </update>
+
+    <delete id="deleteQuoteItems">
+        DELETE FROM erp_quote_item WHERE quote_no = #{quoteNo}
+    </delete>
+
+    <insert id="insertQuoteItem">
+        INSERT INTO erp_quote_item(quote_no, line_no, product_code, quantity, unit_price)
+        VALUES(#{quoteNo}, #{line.lineNo}, #{line.productCode}, #{line.quantity}, #{line.unitPrice})
+    </insert>
+
+    <update id="mergeOrder">
+        MERGE INTO erp_sales_order(order_no, quote_no, customer_code, order_date, status, total_amount)
+        KEY(order_no)
+        VALUES(#{order.orderNo}, #{order.quoteNo}, #{order.customerCode}, #{order.orderDate}, #{order.status}, #{order.totalAmount})
+    </update>
+
+    <delete id="deleteOrderItems">
+        DELETE FROM erp_sales_order_item WHERE order_no = #{orderNo}
+    </delete>
+
+    <insert id="insertOrderItem">
+        INSERT INTO erp_sales_order_item(order_no, line_no, product_code, quantity, unit_price)
+        VALUES(#{orderNo}, #{line.lineNo}, #{line.productCode}, #{line.quantity}, #{line.unitPrice})
+    </insert>
+
+    <delete id="deleteQuote">DELETE FROM erp_quote WHERE quote_no = #{quoteNo}</delete>
+    <delete id="deleteOrder">DELETE FROM erp_sales_order WHERE order_no = #{orderNo}</delete>
+
+    <insert id="insertSyncHistory" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sync_history(direction, entity_type, external_key, operation, status, message, created_at)
+        VALUES(#{direction}, #{entityType}, #{externalKey}, #{operation}, #{status}, #{message}, #{createdAt})
+    </insert>
+
+    <select id="selectSyncHistory" resultType="dev.portfolio.integration.model.SyncHistoryRecord">
+        SELECT id, direction, entity_type, external_key, operation, status, message, created_at
+        FROM sync_history ORDER BY id DESC
+    </select>
+</mapper>

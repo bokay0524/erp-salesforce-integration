@@ -1,0 +1,63 @@
+{
+  "info": {
+    "name": "ERP Salesforce Integration Portfolio",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/health"
+      }
+    },
+    {
+      "name": "Sync Customer",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/erp/customers/CUST-1001/sync"
+      }
+    },
+    {
+      "name": "Bulk Sync Products",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/erp/products/bulk-sync"
+      }
+    },
+    {
+      "name": "Sync Order",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/erp/orders/SO-2026-0001/sync"
+      }
+    },
+    {
+      "name": "Sync Delivery",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/erp/deliveries/DLV-2026-0001/sync"
+      }
+    },
+    {
+      "name": "Mock CRM State",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/demo/crm-state"
+      }
+    },
+    {
+      "name": "Sync History",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/erp/sync-history"
+      }
+    }
+  ]
+}

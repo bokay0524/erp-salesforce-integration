@@ -1,0 +1,45 @@
+@baseUrl = http://localhost:8080
+
+### Health
+GET {{baseUrl}}/api/health
+
+### Customer ERP -> CRM
+POST {{baseUrl}}/api/erp/customers/CUST-1001/sync
+
+### Product bulk ERP -> CRM
+POST {{baseUrl}}/api/erp/products/bulk-sync
+
+### Order ERP -> CRM
+POST {{baseUrl}}/api/erp/orders/SO-2026-0001/sync
+
+### Delivery ERP -> CRM
+POST {{baseUrl}}/api/erp/deliveries/DLV-2026-0001/sync
+
+### Mock Salesforce state
+GET {{baseUrl}}/api/demo/crm-state
+
+### Integration history
+GET {{baseUrl}}/api/erp/sync-history
+
+### CRM -> ERP Quote + Order
+POST {{baseUrl}}/api/crm/quote-orders
+Content-Type: application/json
+
+{
+  "quote": {
+    "quoteNo": "Q-2026-1000",
+    "customerCode": "CUST-1002",
+    "quoteDate": "2026-09-29",
+    "status": "APPROVED",
+    "items": [{"lineNo": 1, "productCode": "PRD-001", "quantity": 1, "unitPrice": 120000}]
+  },
+  "order": {
+    "orderNo": "SO-2026-1000",
+    "quoteNo": "Q-2026-1000",
+    "customerCode": "CUST-1002",
+    "orderDate": "2026-09-29",
+    "status": "CONFIRMED",
+    "totalAmount": 120000,
+    "items": [{"lineNo": 1, "productCode": "PRD-001", "quantity": 1, "unitPrice": 120000}]
+  }
+}
